@@ -1,18 +1,30 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Container } from 'react-bootstrap'
+import Delete from './pages/Delete'
+import Search from './pages/Search'
+import { NoMatch } from "./pages/NoMatch";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
+import { Layout } from './components/Layout'
+import { Jumbotron } from './components/Jumbotron'
+import { NavigationBar } from "./components/NavigationBar";
 
 function App() {
   return (
-    <div className="App">
-      <div className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h2>Welcome to React</h2>
-      </div>
-      <p className="App-intro">
-        To get started, edit <code>src/App.js</code> and save to reload.
-      </p>
-    </div>
+    <React.Fragment>  
+    <NavigationBar />
+    <Jumbotron />
+    <Layout>
+      <Router>
+        <Switch>
+          <Route exact path={['/Search']} component={Search} />
+          <Route exact path={['/', '/Delete']} component={Delete} />
+          <Route component={NoMatch} />
+        </Switch>
+      </Router>
+    </Layout>
+  </React.Fragment>
   );
 }
 
