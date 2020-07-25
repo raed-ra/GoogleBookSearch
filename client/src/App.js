@@ -1,8 +1,8 @@
-import React, { Component } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { Container } from 'react-bootstrap'
 import Delete from './pages/Delete'
 import Search from './pages/Search'
+import NewBook from './pages/NewBook'
 import { NoMatch } from "./pages/NoMatch";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
@@ -20,6 +20,7 @@ function App() {
         <Switch>
           <Route exact path={['/Search']} component={Search} />
           <Route exact path={['/', '/Delete']} component={Delete} />
+          <Route exact path={['/NewBook']} component={NewBook} />
           <Route component={NoMatch} />
         </Switch>
       </Router>
@@ -30,3 +31,5 @@ function App() {
 
 
 export default App;
+
+
