@@ -2,17 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import BookList from '../components/BookList';
 import API from '../utils/API'
-import BookListItem from '../components/BookListItem';
+import io from 'socket.io-client';
+import NewBook from "./NewBook"
+// const ENDPOINT = 'localhost:3000'
+let socket = io();
+
 export default function Search() {
-
     const [books, setBooks] = useState([]);
+    const [redirect, setRedirect] = useState('');
+    const [newBook, setNewbook] = useState('');
 
-    const onDelete = API.deleteBook;
 
-    useEffect(() => {
-        async function fetchData() {
+    async function fetchData() {
+        try {
             const results = await API.getBooks();
-            console.log(results)
             const books = results.map((book) => ({
                 id: book._id,
                 title: book.title,
@@ -24,16 +27,41 @@ export default function Search() {
             }))
             setBooks(books)
         }
+        catch (err) {
+            console.log(err)
+        }
+    }
+
+    const onDelete = async (id) => {
+        try {
+            await API.deleteBook(id)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    useEffect(() => {
+        socket.on('new-book-save-message', (data) => {
+            console.log(data)
+            setNewbook([JSON.parse(data.newBook)])
+            setRedirect(true)
+        })
         fetchData()
     });
 
-    return (
-        <>
-            <Row>
-                <Col>
-                    <BookList books={books} />
-                </Col>
-            </Row>
-        </>
-    )
+    if (redirect) {
+        console.log('we are redirecting')
+        return <><NewBook newBook={newBook} /> </>
+    } else {
+        console.log('we are NOT redirecting')
+        return (
+            <>
+                <Row>
+                    <Col>
+                        <BookList books={books} pageTitle="List of saved books:" />
+                    </Col>
+                </Row>
+            </>
+        )
+    }
 }

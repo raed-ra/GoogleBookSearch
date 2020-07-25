@@ -9,8 +9,11 @@ export default function BookListItem({
     authors, 
     image,
     onSave,
-    onDelete
+    onDelete,
+    savedBook
 }) {
+    console.log(id)
+    console.log(savedBook)
     return (
         <ListGroup.Item>
             <Row>
@@ -21,13 +24,16 @@ export default function BookListItem({
                     {link &&  <Button as ="a" href={link}>View</Button>}{' '}
                     {onSave && <Button  
                     onClick={
-                        ()=> onSave({title, description, link, authors, image })}>Save</Button>}{' '}
+                        ()=> {onSave({id, title, description, link, authors, image })}}>Save</Button>}{' '}
                     {onDelete && <Button onClick={()=>onDelete(id)} variant="danger">Delete</Button>}
                 </Col>
             </Row>
             <Row>
-                <Col>
+                <Col sm={10}>
                     <p>{authors && authors.join(' ')}</p>
+                </Col>
+                <Col sm={2}>
+                    <p>{savedBook}</p>
                 </Col>
             </Row>
             <Row>
